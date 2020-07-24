@@ -15,11 +15,11 @@ class CreateTableInvoicesDetailTable extends Migration
     {
         Schema::create('invoices_detail', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('invoice_id');
-            $table->integer('product_id');
-            $table->integer('quantity');
-            $table->integer('total_price');
-            $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
+            $table->unsignedBigInteger('invoices_id')->index();
+            $table->unsignedBigInteger('product_id')->index();
+            $table->unsignedInteger('quantity');
+            $table->decimal('total_price');
+            $table->foreign('invoices_id')->references('id')->on('invoices')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->timestamps();
         });

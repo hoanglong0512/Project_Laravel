@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Product;
 use App\Category;
 use App\InvoicesDetail;
-use App\Order;
+use App\Invoices;
 use App\Posts;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
@@ -111,6 +111,7 @@ class HomeController extends Controller
         $quantityProducts = collect();
         $priceProduct = collect();
         $total = 0;
+
         foreach ($carts as $key => $cart) {
             $total += $cart['price'] * $cart['quantity'];
             $arrayProducts->push($cart['id']);
@@ -119,14 +120,14 @@ class HomeController extends Controller
             $products = Product::where('name', $cart['name'])->first();
             $orderItem = new InvoicesDetail([
                 'product_id'    =>  $products->id,
-                'quantity'      =>  $cart->quantity,
+                'quantity'      =>  $cart['quantity'],
                 'price'         =>  $priceProduct
             ]);
 
             $cart->items()->save($orderItem);
         }
         dd($carts);
-        $model = new Order();
+        $model = new Invoices();
         $model->fill($request->all());
         $model->total_price = $total;
         $model->save();
